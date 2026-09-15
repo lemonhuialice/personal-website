@@ -1,0 +1,636 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>项目管理看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--glass-a:rgba(255,255,255,.45);--glass-b:rgba(255,255,255,.45);--glass-c:rgba(255,255,255,.45);--glass-blur:12px;--glass-border:1px solid rgba(255,255,255,.4);--glass-shadow:0 4px 16px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.12)}
+body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC",sans-serif;background:#f1f5f9;color:#1e293b;display:flex;height:100vh;overflow:hidden;position:relative}
+.sidebar{position:relative;z-index:1;width:260px;min-width:260px;background:#0f172a;color:#e2e8f0;display:flex;flex-direction:column;height:100vh}
+.sidebar-header{padding:20px 18px;border-bottom:1px solid #1e293b}
+.sidebar-header h1{font-size:16px;font-weight:600;color:#f8fafc;letter-spacing:.5px}
+.sidebar-header .subtitle{font-size:11px;color:#94a3b8;margin-top:4px}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px 0}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+.nav-overview,.nav-risk-dashboard{display:flex;align-items:center;gap:8px;padding:10px 18px;cursor:pointer;font-size:13px;font-weight:500;color:#e2e8f0;transition:background .15s;border-left:3px solid transparent}
+.nav-overview:hover,.nav-risk-dashboard:hover{background:#1e293b}
+.nav-overview.active,.nav-risk-dashboard.active{background:#1e3a5f;border-left-color:#3b82f6;color:#93c5fd}
+.nav-overview .icon,.nav-risk-dashboard .icon{font-size:15px;width:20px;text-align:center}
+.nav-divider{height:1px;background:#1e293b;margin:8px 18px}
+.nav-section-label{font-size:10px;color:#64748b;padding:4px 18px 2px;text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 18px;cursor:pointer;font-size:12px;color:#cbd5e1;transition:background .15s;border-left:3px solid transparent}
+.nav-item:hover{background:#1e293b}
+.nav-item.active{background:#1e3a5f;border-left-color:#3b82f6;color:#f8fafc}
+.nav-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.nav-item .dot.green{background:#10b981}
+.nav-item .dot.yellow{background:#f59e0b}
+.nav-item .dot.red{background:#ef4444}
+.nav-item .dot.grey{background:#94a3b8}
+.nav-item .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{position:relative;z-index:1;flex:1;overflow-y:auto;padding:24px 28px}
+.main::-webkit-scrollbar{width:6px}
+.main::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+.page-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:20px}
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--glass-a);border-radius:8px;padding:14px 16px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));display:flex;align-items:center;gap:12px}
+.stat-card .stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.stat-card .stat-icon.total{background:#eff6ff;color:#3b82f6}
+.stat-card .stat-icon.ok{background:#ecfdf5;color:#10b981}
+.stat-card .stat-icon.warn{background:#fffbeb;color:#f59e0b}
+.stat-card .stat-icon.bad{background:#fef2f2;color:#ef4444}
+.stat-card .stat-icon.risk{background:#fdf2f8;color:#ec4899}
+.stat-card .stat-body{display:flex;flex-direction:column}
+.stat-card .stat-value{font-size:22px;font-weight:700;line-height:1.1}
+.stat-card .stat-label{font-size:11px;color:#64748b;margin-top:2px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.chart-row.full{grid-template-columns:1fr}
+.chart-panel{background:var(--glass-a);border-radius:8px;padding:14px 18px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+.chart-panel h3{font-size:12px;font-weight:600;color:#334155;margin-bottom:8px}
+.chart-panel .chart-wrap{position:relative;width:100%;height:260px}
+.chart-panel .chart-wrap canvas{max-width:100%;max-height:100%}
+.chart-panel.gantt .chart-wrap{height:420px}
+.section-title{font-size:14px;font-weight:600;color:#334155;margin:20px 0 12px 2px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:28px}
+.project-card{background:var(--glass-a);border-radius:8px;padding:14px;box-shadow:var(--glass-shadow);border-top:1px solid rgba(255,255,255,.3);border-right:1px solid rgba(255,255,255,.3);border-bottom:1px solid rgba(255,255,255,.3);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));cursor:pointer;transition:box-shadow .15s,transform .15s;border-left:4px solid #10b981}
+.project-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06);transform:translateY(-2px)}
+.project-card.status-yellow{border-left-color:#f59e0b}
+.project-card.status-red{border-left-color:#ef4444}
+.project-card.status-unknown{border-left-color:#94a3b8}
+.project-card .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.project-card .card-io{font-size:11px;color:#64748b;font-weight:500}
+.project-card .card-name{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px;line-height:1.3}
+.project-card .card-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.badge-green{background:#ecfdf5;color:#059669}
+.badge-yellow{background:#fffbeb;color:#d97706}
+.badge-red{background:#fef2f2;color:#dc2626}
+.badge-grey{background:#f1f5f9;color:#64748b}
+.project-card .card-meta{font-size:10px;color:#94a3b8;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
+.project-card .card-achievements{font-size:10px;color:#475569;margin-top:6px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.project-card .card-risks{font-size:10px;margin-top:5px;display:flex;gap:6px;flex-wrap:wrap}
+.risk-pill{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500}
+.risk-pill.risk{background:#fef3c7;color:#92400e}
+.risk-pill.issue{background:#fee2e2;color:#991b1b}
+.risk-toggle-btn{border:1px solid #d1d5db;background:#fff;color:#64748b;font-size:11px;padding:2px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:all .15s}.risk-toggle-btn:hover{border-color:#3b82f6;color:#3b82f6}.risk-toggle-btn.resolved{background:#3b82f6;color:#fff;border-color:#3b82f6}.risk-pill.resolved{background:#d1fae5;color:#065f46}
+.bubble-section{background:var(--glass-b);border-radius:8px;padding:18px 22px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));margin-bottom:20px}
+.bubble-section .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.bubble-section .section-header h3{font-size:13px;font-weight:600;color:#334155}
+.bubble-container{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.bubble-canvas-wrap{width:420px;max-width:100%;flex-shrink:0}
+#bubbleChart{display:block;width:100%;aspect-ratio:420/340}
+.bubble-legend{display:flex;flex-direction:column;gap:6px}
+.bubble-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#475569}
+.bubble-legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.bubble-row{display:flex;gap:20px;align-items:flex-start}
+.risk-type-chart-panel{flex:1;min-width:280px;background:var(--glass-c);border-radius:8px;padding:14px 18px;border:var(--glass-border);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.risk-type-chart-panel h3{font-size:12px;font-weight:600;color:#334155;margin-bottom:10px}
+.risk-type-chart-wrap{width:100%;height:280px}
+.risk-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.risk-stat-card{background:var(--glass-c);border-radius:8px;padding:14px 18px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:center}
+.risk-stat-card .val{font-size:26px;font-weight:700;line-height:1.1}
+.risk-stat-card .lbl{font-size:11px;color:#64748b;margin-top:3px}
+.risk-table-wrap{background:var(--glass-a);border-radius:8px;box-shadow:var(--glass-shadow);padding:14px 18px;border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+.risk-table-wrap .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.risk-table-wrap .section-header h3{font-size:13px;font-weight:600;color:#334155}
+.risk-filter{font-size:11px;padding:3px 8px;border:1px solid #d1d5db;border-radius:6px;color:#475569;background:#fff;cursor:pointer;outline:none;margin-left:4px}
+.risk-filter:focus{border-color:#3b82f6}
+.risk-table{width:100%;border-collapse:collapse;font-size:11px}
+.risk-table th{text-align:left;padding:6px 8px;background:#f8fafc;color:#64748b;font-weight:600;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+.risk-table td{padding:6px 8px;border-bottom:1px solid #f1f5f9;color:#334155;vertical-align:top}
+.risk-table tr:hover td{background:#f8fafc}
+.risk-table .severity{display:inline-flex;align-items:center;gap:3px}
+.risk-table .sev-dot{width:6px;height:6px;border-radius:50%}
+.risk-table .sev-dot.high{background:#ef4444}
+.risk-table .sev-dot.medium{background:#f59e0b}
+.risk-table .sev-dot.low{background:#10b981}
+.detail-header{background:var(--glass-a);border-radius:8px;padding:16px 22px;box-shadow:var(--glass-shadow);margin-bottom:16px;display:flex;flex-direction:column;gap:12px;border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+.detail-header .dh-left h2{font-size:17px;font-weight:700;color:#1e293b}
+.detail-header .dh-left .dh-io{font-size:11px;color:#64748b;margin-top:2px}
+.detail-header .dh-meta{display:flex;gap:16px;align-items:center;font-size:11px;color:#475569}
+.detail-header .dh-meta span{display:flex;flex-direction:column;align-items:flex-end}
+.detail-header .dh-meta .label{color:#94a3b8;font-size:10px}.detail-header-top{display:flex;justify-content:space-between;align-items:flex-start}.detail-header-bottom{display:flex;align-items:center;gap:12px;font-size:11px;color:#475569;padding-top:8px;border-top:1px solid #f1f5f9}.detail-header-bottom .label{color:#94a3b8;font-size:10px}.detail-info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 20px;padding-top:12px;border-top:1px solid #f1f5f9}.info-grid-item{display:flex;flex-direction:column;gap:1px}.info-grid-label{font-size:10px;color:#94a3b8}.info-grid-value{font-size:12px;color:#1e293b;font-weight:500}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.detail-panel{background:var(--glass-a);border-radius:8px;box-shadow:var(--glass-shadow);padding:14px 16px;border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+.detail-panel h3{font-size:12px;font-weight:600;color:#334155;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e2e8f0}
+.detail-panel .info-row{display:flex;font-size:11px;padding:4px 0;border-bottom:1px solid #f8fafc}
+.detail-panel .info-row .info-label{color:#94a3b8;width:72px;flex-shrink:0}
+.detail-panel .info-row .info-value{color:#334155;flex:1}
+.detail-panel .info-text{font-size:11px;color:#475569;line-height:1.6;white-space:pre-wrap}
+.risk-flow-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9}
+.risk-flow-item:last-child{border-bottom:none}
+.flow-indicator{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:42px}
+.flow-week{font-size:9px;color:#94a3b8;text-align:center}
+.flow-dot{width:12px;height:12px;border-radius:50%}
+.flow-dot.severity-high{background:#ef4444;box-shadow:0 0 0 3px #fee2e2}
+.flow-dot.severity-medium{background:#f59e0b;box-shadow:0 0 0 3px #fef3c7}
+.flow-dot.severity-low{background:#10b981;box-shadow:0 0 0 3px #d1fae5}.flow-dot.severity-resolved{background:#3b82f6;box-shadow:0 0 0 3px #dbeafe}.flow-type-tag{font-size:9px;padding:1px 5px;border-radius:6px;font-weight:500;white-space:nowrap}.flow-type-tag.risk{background:#fef3c7;color:#92400e}.flow-type-tag.issue{background:#fee2e2;color:#991b1b}
+.flow-arrow{color:#cbd5e1;font-size:9px;line-height:1}
+.flow-body{flex:1;min-width:0}
+.flow-body .flow-desc{font-size:11px;color:#334155;line-height:1.4}
+.flow-body .flow-meta{font-size:10px;color:#94a3b8;margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.flow-status-badge{font-size:9px;padding:1px 5px;border-radius:8px;font-weight:500;white-space:nowrap}
+.flow-status-badge.open{background:#fef3c7;color:#92400e}
+.flow-status-badge.resolved{background:#d1fae5;color:#065f46}
+.gate-list{display:flex;flex-direction:column;gap:0}
+.gate-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;position:relative}
+.gate-item:not(:last-child)::before{content:"";position:absolute;left:7px;top:20px;bottom:-6px;width:2px;background:#e2e8f0}
+.gate-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:1px}
+.gate-dot.done{background:#10b981;border:3px solid #a7f3d0}
+.gate-dot.progress{background:#f59e0b;border:3px solid #fde68a}
+.gate-name{font-size:11px;color:#1e293b;font-weight:500;line-height:1.3}
+.gate-date{font-size:10px;color:#94a3b8}
+.gate-body{flex:1;min-width:0}
+.detail-gate-panel{background:var(--glass-a);border-radius:8px;padding:14px 22px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));margin-bottom:16px}
+.gate-timeline{display:flex;align-items:flex-start;overflow-x:auto;padding:12px 0;gap:0}
+.gate-h-item{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:100px;flex-shrink:0;text-align:center}
+.gate-h-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.gate-h-dot.done{background:#10b981;border:3px solid #a7f3d0}
+.gate-h-dot.progress{background:#f59e0b;border:3px solid #fde68a}
+.gate-h-dot.pending{background:#cbd5e1;border:3px solid #e2e8f0}
+.gate-h-name{font-size:11px;color:#334155;font-weight:500;line-height:1.3;max-width:120px}
+.gate-h-date{font-size:10px;color:#94a3b8}
+.gate-h-connector{flex:1;height:2px;min-width:20px;background:#e2e8f0;margin-top:7px}
+.gate-h-connector.done{background:#10b981}
+.gate-h-connector.progress{background:linear-gradient(to right,#10b981 50%,#e2e8f0 50%)}
+.status-mini-cards{display:flex;gap:8px;align-items:center}
+.status-mini-card{display:flex;align-items:center;gap:5px;background:var(--glass-c);border-radius:6px;padding:4px 10px;font-size:11px;border:var(--glass-border);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.status-mini-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-mini-dot.green{background:#10b981}
+.status-mini-dot.yellow{background:#f59e0b}
+.status-mini-dot.red{background:#ef4444}
+.status-mini-dot.grey{background:#94a3b8}
+.status-mini-label{color:#64748b}
+.status-mini-value{color:#1e293b;font-weight:500}
+.detail-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.gate-dot.pending{background:#cbd5e1;border:3px solid #e2e8f0}
+.color-green{color:#10b981}.color-yellow{color:#f59e0b}.color-red{color:#ef4444}.color-grey{color:#94a3b8}
+.empty-state{text-align:center;padding:24px;color:#94a3b8;font-size:12px}
+@media(max-width:1200px){.detail-grid{grid-template-columns:1fr}.chart-row{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.sidebar{width:200px;min-width:200px}.stat-row,.risk-stats-row{grid-template-columns:repeat(2,1fr)}.card-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.detail-info-grid{grid-template-columns:repeat(2,1fr)}.detail-grid-two{grid-template-columns:1fr}.bubble-container{flex-direction:column;align-items:flex-start;gap:8px}.bubble-row{flex-direction:column}.bubble-canvas-wrap{width:100%}}
+
+.detail-two-col{display:flex;gap:16px;margin-top:16px}
+.detail-left{flex:3;min-width:0}
+.detail-right{flex:2;min-width:0}
+.risk-analysis-panel{background:var(--glass-b);border-radius:8px;padding:18px 20px;box-shadow:var(--glass-shadow);border:var(--glass-border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:sticky;top:20px}
+.risk-analysis-panel h3{font-size:13px;font-weight:600;color:#334155;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.risk-analysis-btn{display:block;width:100%;padding:10px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s}
+.risk-analysis-btn:hover{background:#2563eb}
+.risk-analysis-btn:disabled{background:#94a3b8;cursor:not-allowed}
+.risk-analysis-loading{display:flex;align-items:center;gap:8px;padding:20px 0;color:#64748b;font-size:12px}
+.risk-analysis-spinner{width:18px;height:18px;border:2px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;animation:ra-spin .8s linear infinite}
+@keyframes ra-spin{to{transform:rotate(360deg)}}
+.risk-analysis-result{font-size:12px;color:#334155;line-height:1.7;max-height:calc(100vh - 280px);overflow-y:auto}
+.risk-analysis-result h1,.risk-analysis-result h2,.risk-analysis-result h3{font-size:13px;font-weight:600;color:#1e293b;margin:12px 0 6px}
+.risk-analysis-result h1{font-size:15px}
+.risk-analysis-result ul,.risk-analysis-result ol{padding-left:18px;margin:4px 0}
+.risk-analysis-result li{margin-bottom:3px}
+.risk-analysis-result strong{color:#0f172a}
+.risk-analysis-result p{margin:4px 0}
+.risk-analysis-result table{width:100%;border-collapse:collapse;margin:8px 0;font-size:11px}
+.risk-analysis-result th,.risk-analysis-result td{border:1px solid #e2e8f0;padding:4px 8px;text-align:left}
+.risk-analysis-result th{background:#f8fafc;font-weight:600}
+.risk-analysis-result tr:nth-child(even){background:#f8fafc}
+.risk-analysis-result pre{background:#f1f5f9;padding:8px;border-radius:4px;overflow-x:auto;font-size:11px}
+.risk-analysis-result code{background:#f1f5f9;padding:1px 4px;border-radius:3px;font-size:11px}
+.risk-analysis-result blockquote{border-left:3px solid #3b82f6;padding-left:12px;margin:8px 0;color:#64748b}
+.risk-analysis-result code{background:#f1f5f9;padding:1px 4px;border-radius:3px;font-size:11px}
+.risk-analysis-result::-webkit-scrollbar{width:4px}
+.risk-analysis-result::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px}
+.risk-analysis-error{color:#ef4444;font-size:12px;padding:12px 0}
+.risk-analysis-placeholder{color:#94a3b8;font-size:12px;padding:16px 0;text-align:center}
+
+body::before{content:"";position:fixed;inset:0;background:url(frontbackpic.jpg) center/cover no-repeat fixed;opacity:.3;z-index:0;pointer-events:none}
+</style>
+<script src="vendor/marked.min.js"></script></head>
+<body>
+<div class="sidebar">
+<div class="sidebar-header"><h1>项目管理看板</h1><div class="subtitle" id="sidebarSubtitle">20 个项目</div></div>
+<div class="sidebar-nav">
+<div class="nav-overview active" onclick="showOverview()"><span class="icon">&#x1F4CA;</span> 项目总览</div>
+<div class="nav-risk-dashboard" onclick="showRiskDashboard()"><span class="icon">&#x1F6E1;</span> 风险管理看板</div>
+<div class="nav-divider"></div>
+<div class="nav-section-label">项目列表</div>
+<div id="projectNav"></div>
+</div>
+</div>
+<div class="main" id="mainContent"></div>
+<script src="vendor/chart.umd.min.js"></script>
+<script src="vendor/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="data.js"></script>
+<script>
+var PROJECTS = [];
+var resolvedSet = {};
+var _riskAnalysisCache = {};
+(function init(){
+  // 延迟到整段脚本(含所有 var 赋值)执行完后再渲染, 避免 STATUS_MAP 等尚未赋值即被引用
+  setTimeout(function(){
+    PROJECTS = window.__AMER_PROJECTS__;
+    PROJECTS.forEach(function(p){(p.risks||[]).forEach(function(r){resolvedSet[r.id]=!!r.resolved;});});
+    buildSidebar();showOverview();
+  }, 0);
+})();
+
+
+var STATUS_MAP={"Green":{cls:"green",label:"正常",badge:"badge-green",dot:"green"},"Yellow":{cls:"yellow",label:"风险",badge:"badge-yellow",dot:"yellow"},"Red":{cls:"red",label:"延期",badge:"badge-red",dot:"red"},"Grey":{cls:"grey",label:"未开始",badge:"badge-grey",dot:"grey"}};
+function statusInfo(s){return STATUS_MAP[s]||{cls:"grey",label:"未评估",badge:"badge-grey",dot:"grey"};}
+function fmtDate(d){if(!d)return"-";var s=String(d);if(s.length>=10)return s.substring(0,10);return s;}
+function escapeHtml(s){if(!s)return"";return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+var RISK_CATEGORIES=["进度风险","资源风险","技术风险","需求风险","成本风险","质量风险","外部风险"];
+var RISK_COLORS={"进度风险":"#3b82f6","资源风险":"#f59e0b","技术风险":"#8b5cf6","需求风险":"#10b981","成本风险":"#ef4444","质量风险":"#06b6d4","外部风险":"#f97316"};
+
+
+var chartInstances = {};
+function destroyCharts() {
+  Object.values(chartInstances).forEach(function(c) { try { c.destroy(); } catch(e) {} });
+  chartInstances = {};
+}
+function renderOverviewCharts(stats, phVals, phLbls, phClrs, brandCount, tC, cC, sC, rC, dmVals, dmLbls, dmClrs, pmVals, pmLbls, ganttProjs) {
+  destroyCharts();
+  var gut = '"Microsoft YaHei","PingFang SC",sans-serif';
+  var tl = {family: gut, size: 10};
+  var stl = {family: gut, size: 9};
+  // 1. Status Doughnut
+  var c1 = document.getElementById("cvStatus");
+  if (c1) {
+    var sl = ["正常","风险","延期","未评"];
+    chartInstances.cvStatus = new Chart(c1.getContext("2d"), {
+      type: "doughnut",
+      data: {labels:sl,datasets:[{data:[stats.green,stats.yellow,stats.red,stats.unknown],backgroundColor:["#10b981","#f59e0b","#ef4444","#94a3b8"],borderWidth:2,borderColor:"#fff"}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:12,padding:10,font:tl}}}}
+    });
+  }
+  // 2. Phase Bar
+  var c2 = document.getElementById("cvPhase");
+  if (c2 && phVals.length) {
+    chartInstances.cvPhase = new Chart(c2.getContext("2d"), {
+      type:"bar",data:{labels:phLbls,datasets:[{data:phVals,backgroundColor:phClrs.slice(0,phVals.length),borderRadius:4,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:stl}},y:{beginAtZero:true,ticks:{stepSize:1,font:stl}}}}
+    });
+  }
+  // 3. Brand Doughnut
+  var c3 = document.getElementById("cvBrand");
+  if (c3) {
+    var bk=Object.keys(brandCount),bv=[],bClrs=[],bcColors={"CORP":"#3b82f6","ARC":"#8b5cf6","WIL":"#10b981"};
+    bk.forEach(function(k){bv.push(brandCount[k]);bClrs.push(bcColors[k]||"#94a3b8");});
+    chartInstances.cvBrand = new Chart(c3.getContext("2d"), {
+      type:"doughnut",data:{labels:bk,datasets:[{data:bv,backgroundColor:bClrs,borderWidth:2,borderColor:"#fff"}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:12,padding:10,font:tl}}}}
+    });
+  }
+  // 4. Health Stacked Bar (horizontal)
+  var c4 = document.getElementById("cvHealth");
+  if (c4) {
+    var gv=[tC.Green||0,cC.Green||0,sC.Green||0,rC.Green||0];
+    var yv=[tC.Yellow||0,cC.Yellow||0,sC.Yellow||0,rC.Yellow||0];
+    var rv=[tC.Red||0,cC.Red||0,sC.Red||0,rC.Red||0];
+    chartInstances.cvHealth = new Chart(c4.getContext("2d"), {
+      type:"bar",
+      data:{labels:["时间","成本","范围","资源"],
+        datasets:[
+          {label:"正常",data:gv,backgroundColor:"#10b981",borderRadius:0},
+          {label:"风险",data:yv,backgroundColor:"#f59e0b",borderRadius:0},
+          {label:"延期",data:rv,backgroundColor:"#ef4444",borderRadius:0}
+        ]},
+      options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:"bottom",labels:{boxWidth:10,padding:8,font:tl}}},
+        scales:{x:{stacked:true,beginAtZero:true,ticks:{stepSize:1,font:stl}},y:{stacked:true,ticks:{font:stl}}}}
+    });
+  }
+  // 5. Domain Bar
+  var c5 = document.getElementById("cvDomain");
+  if (c5 && dmVals.length) {
+    chartInstances.cvDomain = new Chart(c5.getContext("2d"), {
+      type:"bar",data:{labels:dmLbls,datasets:[{data:dmVals,backgroundColor:dmClrs.slice(0,dmVals.length),borderRadius:4,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:stl}},y:{beginAtZero:true,ticks:{stepSize:1,font:stl}}}}
+    });
+  }
+  // 6. PM Workload Horizontal Bar
+  var c6 = document.getElementById("cvPM");
+  if (c6 && pmVals.length) {
+    chartInstances.cvPM = new Chart(c6.getContext("2d"), {
+      type:"bar",data:{labels:pmLbls,datasets:[{data:pmVals,backgroundColor:"#3b82f6",borderRadius:4,borderSkipped:false}]},
+      options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:stl}},y:{ticks:{font:stl}}}}
+    });
+  }
+
+}
+function buildSidebar(){
+  var nav=document.getElementById("projectNav");nav.innerHTML="";
+  var sorted=PROJECTS.map(function(p,i){return {p:p,i:i};});
+  sorted.sort(function(a,b){
+    var sa=(a.p.dop||{})["Overall Status"],sb=(b.p.dop||{})["Overall Status"];
+    var pa=["Yellow","Red"].indexOf(sa)>=0?0:1,pb=["Yellow","Red"].indexOf(sb)>=0?0:1;
+    return pa-pb;
+  });
+  sorted.forEach(function(item){
+    var p=item.p,i=item.i;
+    var dop=p.dop||{},st=statusInfo(dop["Overall Status"]);
+    var name=dop["Project Name"]||dop["IO Number"]||("项目"+(i+1));
+    var sn=name.length>18?name.substring(0,17)+"...":name;
+    var d=document.createElement("div");d.className="nav-item";d.setAttribute("data-idx",i);
+    d.onclick=function(){showProject(parseInt(this.getAttribute("data-idx")));};
+    d.innerHTML='<span class="dot '+st.dot+'"></span><span class="name" title="'+escapeHtml(name)+'">'+escapeHtml(sn)+'</span>';
+    nav.appendChild(d);
+  });
+}
+function clearActiveNav(){document.querySelectorAll(".nav-overview,.nav-risk-dashboard,.nav-item").forEach(function(e){e.classList.remove("active");});}
+function showOverview(){clearActiveNav();document.querySelector(".nav-overview").classList.add("active");document.getElementById("sidebarSubtitle").textContent=PROJECTS.length+" 个项目";renderOverview();}
+function showRiskDashboard(){clearActiveNav();document.querySelector(".nav-risk-dashboard").classList.add("active");document.getElementById("sidebarSubtitle").textContent="风险管理看板";renderRiskDashboard();}
+function showProject(idx){clearActiveNav();var items=document.querySelectorAll(".nav-item");for(var i=0;i<items.length;i++){if(parseInt(items[i].getAttribute("data-idx"))===idx){items[i].classList.add("active");break;}}var p=PROJECTS[idx],dop=p.dop||{};document.getElementById("sidebarSubtitle").textContent=(dop["IO Number"]||"")+" | "+(dop["IT Project Manager"]||"");renderProject(p,idx);}
+
+
+
+function renderOverview(){
+  destroyCharts();
+  var main=document.getElementById("mainContent");
+  var stats={total:PROJECTS.length,green:0,yellow:0,red:0,unknown:0};
+  var phaseCount={},brandCount={},domainCount={},pmCount={};
+  var tC={Green:0,Yellow:0,Red:0,nul:0},cC={Green:0,Yellow:0,Red:0,nul:0},sC={Green:0,Yellow:0,Red:0,nul:0},rC={Green:0,Yellow:0,Red:0,nul:0};
+  var allRisks=[],activeRisk=0;
+
+  PROJECTS.forEach(function(p){
+    var dop=p.dop||{},s=dop["Overall Status"];
+    if(s==="Green")stats.green++;else if(s==="Yellow")stats.yellow++;else if(s==="Red")stats.red++;else stats.unknown++;
+    var ph=dop["Current Project Phase"]||"未分配";phaseCount[ph]=(phaseCount[ph]||0)+1;
+    var br=dop["Brand"]||"其他";brandCount[br]=(brandCount[br]||0)+1;
+    var dm=dop["Business Domain"]||"其他";domainCount[dm]=(domainCount[dm]||0)+1;
+    var pm=dop["IT Project Manager"]||"未知";pmCount[pm]=(pmCount[pm]||0)+1;
+    ["Time","Cost","Scope","Resources"].forEach(function(f){
+      var v=dop[f],key=(v===null||v===undefined)?"nul":v;
+      if(f==="Time")tC[key]=(tC[key]||0)+1;if(f==="Cost")cC[key]=(cC[key]||0)+1;
+      if(f==="Scope")sC[key]=(sC[key]||0)+1;if(f==="Resources")rC[key]=(rC[key]||0)+1;
+    });
+    (p.risks||[]).forEach(function(r){allRisks.push({project:dop,risk:r});if(r.status!=="Green")activeRisk++;});
+
+  });
+
+  var cardsHtml="";
+  PROJECTS.forEach(function(p,i){
+    var dop=p.dop||{},st=statusInfo(dop["Overall Status"]);
+    var name=escapeHtml(dop["Project Name"]||dop["IO Number"]||("项目"+(i+1)));
+    var ach=escapeHtml(dop["Key Achievements in the current period"]||"").replace(/\n/g,"<br>");
+    var risks=p.risks||[],rp="";
+    if(risks.length>0){
+      var op=risks.length,cl=0;
+      if(op>0)rp+='<span class="risk-pill risk">&#9888; '+op+' 活跃</span>';
+      if(cl>0)rp+='<span class="risk-pill resolved">&#10003; '+cl+' 已解决</span>';
+    }
+    cardsHtml+='<div class="project-card status-'+st.cls+'" onclick="showProject('+i+')"><div class="card-header"><div><div class="card-io">'+escapeHtml(dop["IO Number"]||"")+'</div><div class="card-name">'+name+'</div></div><span class="card-badge '+st.badge+'">'+st.label+'</span></div><div class="card-meta"><span>PM: '+escapeHtml(dop["IT Project Manager"]||"-")+'</span><span>'+escapeHtml(dop["Brand"]||"")+'</span><span>'+escapeHtml(dop["Current Project Phase"]||"")+'</span></div>'+(ach?'<div class="card-achievements">'+ach.substring(0,150)+'</div>':"")+(rp?'<div class="card-risks">'+rp+'</div>':"")+'</div>';
+  });
+
+  var phOrder=["Design","Develop","Test","Deploy","未分配"],phVals=[],phLbls=[],phClrs=["#3b82f6","#10b981","#f59e0b","#8b5cf6","#94a3b8"];
+  phOrder.forEach(function(p){if(phaseCount[p]){phLbls.push(p);phVals.push(phaseCount[p]);}});
+
+  var dmArr=[];for(var k in domainCount)dmArr.push({k:k,v:domainCount[k]});dmArr.sort(function(a,b){return b.v-a.v;});
+  var dmLbls=[],dmVals=[],dmClrs=["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#f97316","#ec4899","#84cc16","#14b8a6"];
+  dmArr.slice(0,8).forEach(function(d,i){dmLbls.push(d.k);dmVals.push(d.v);});
+
+  var pmArr=[];for(var k in pmCount)pmArr.push({k:k,v:pmCount[k]});pmArr.sort(function(a,b){return b.v-a.v;});
+  var pmLbls=[],pmVals=[];
+  pmArr.slice(0,10).forEach(function(d,i){pmLbls.push(d.k);pmVals.push(d.v);});
+
+  var ganttProjs=[];
+  PROJECTS.forEach(function(p){var dop=p.dop||{},st=statusInfo(dop["Overall Status"]),gclr=st.cls==="green"?"#10b981":st.cls==="yellow"?"#f59e0b":st.cls==="red"?"#ef4444":"#94a3b8";ganttProjs.push({name:dop["Project Name"]||"",kickoff:dop["Kick - off"],endDate:dop["End date"],color:gclr});});
+
+  main.innerHTML='<div class="page-title">&#x1F4CA; 项目总览</div><div class="stat-row"><div class="stat-card"><div class="stat-icon total">&#x1F4C1;</div><div class="stat-body"><div class="stat-value">'+stats.total+'</div><div class="stat-label">项目总数</div></div></div><div class="stat-card"><div class="stat-icon ok">&#x2713;</div><div class="stat-body"><div class="stat-value">'+stats.green+'</div><div class="stat-label">正常</div></div></div><div class="stat-card"><div class="stat-icon warn">&#x26A0;</div><div class="stat-body"><div class="stat-value">'+stats.yellow+'</div><div class="stat-label">风险</div></div></div><div class="stat-card"><div class="stat-icon bad">&#x2717;</div><div class="stat-body"><div class="stat-value">'+stats.red+'</div><div class="stat-label">延期</div></div></div><div class="stat-card"><div class="stat-icon risk">&#x1F6E1;</div><div class="stat-body"><div class="stat-value">'+activeRisk+'</div><div class="stat-label">活跃风险</div></div></div></div><div class="chart-row"><div class="chart-panel"><h3>&#x1F4CA; 项目状态分布</h3><div class="chart-wrap"><canvas id="cvStatus"></canvas></div></div><div class="chart-panel"><h3>&#x1F4C8; 项目阶段分布</h3><div class="chart-wrap"><canvas id="cvPhase"></canvas></div></div></div><div class="chart-row"><div class="chart-panel"><h3>&#x1F3E2; 品牌分布</h3><div class="chart-wrap"><canvas id="cvBrand"></canvas></div></div><div class="chart-panel"><h3>&#x2696; 四维健康度</h3><div class="chart-wrap"><canvas id="cvHealth"></canvas></div></div></div><div class="chart-row"><div class="chart-panel"><h3>&#x1F4CA; 业务域分布</h3><div class="chart-wrap"><canvas id="cvDomain"></canvas></div></div><div class="chart-panel"><h3>&#x1F465; PM 项目负载</h3><div class="chart-wrap"><canvas id="cvPM"></canvas></div></div></div><div class="section-title">&#x1F4CB; 项目卡片 ('+stats.total+')</div><div class="card-grid">'+cardsHtml+'</div>';
+
+  renderOverviewCharts(stats, phVals, phLbls, phClrs, brandCount, tC, cC, sC, rC, dmVals, dmLbls, dmClrs, pmVals, pmLbls, ganttProjs);
+}
+
+
+
+function renderRiskDashboard(){
+  destroyCharts();
+  var main=document.getElementById("mainContent");
+  var catData={};RISK_CATEGORIES.forEach(function(c){catData[c]={total:0,issues:0,risks:0,open:0,closed:0};});
+  var allRisks=[];
+  PROJECTS.forEach(function(p){var dop=p.dop||{};(p.risks||[]).forEach(function(r){var cat=r.category||"进度风险";if(!catData[cat])cat="进度风险";catData[cat].total++;if(r.concernType==="Issue")catData[cat].issues++;else catData[cat].risks++;allRisks.push({project:dop,risk:r});});});
+  chartInstances._catData=catData;chartInstances._catSevData=catSevData;
+  var catSevData={};RISK_CATEGORIES.forEach(function(c){catSevData[c]={high:0,medium:0,low:0};});allRisks.forEach(function(item){var r=item.risk,cat=r.category||"进度风险";if(!catSevData[cat])cat="进度风险";var sev=(r.concernType==="Issue"?10:(r.possibility||0))*(r.impact||0),sevCls=sev>=70?"high":(sev>=35?"medium":"low");catSevData[cat][sevCls]++;});
+  var totalRisks=allRisks.length,openRisks=allRisks.filter(function(r){return !resolvedSet[r.risk.id];}).length,closedRisks=totalRisks-openRisks,highSev=allRisks.filter(function(r){return (r.risk.concernType==="Issue"?10:(r.risk.possibility||0))*(r.risk.impact||0)>=70;}).length;
+  var riskRows="";
+  allRisks.sort(function(a,b){return (resolvedSet[a.risk.id]?1:0)-(resolvedSet[b.risk.id]?1:0);});
+  allRisks.forEach(function(item,idx){var r=item.risk,dop=item.project,sev=(r.concernType==="Issue"?10:(r.possibility||0))*(r.impact||0),sevCls=sev>=70?"high":(sev>=35?"medium":"low"),sevLabel=sev>=70?"高":(sev>=35?"中":"低");riskRows+='<tr data-severity="'+sevCls+'" data-sev-value="'+sev+'" data-original-index="'+idx+'" data-category="'+escapeHtml(r.category||"")+'"><td>'+escapeHtml((dop["IO Number"]||"")+" "+(dop["Project Name"]||"").substring(0,20))+'</td><td>'+escapeHtml(r.description||"")+'</td><td><span class="severity"><span class="sev-dot '+sevCls+'"></span>'+sevLabel+' ('+sev+')</span></td><td>'+escapeHtml(r.mitigation||"-")+'</td><td>'+escapeHtml(r.owner||"-")+'</td><td>'+fmtDate(r.date)+'</td><td>'+escapeHtml(r.category||"-")+'</td><td><button class="risk-toggle-btn'+((resolvedSet[r.id]?' resolved':''))+'" data-risk-id="'+r.id+'" onclick="toggleRiskResolved('+r.id+')">'+(resolvedSet[r.id]?'已解决':'未解决')+'</button></td></tr>';});
+  main.innerHTML='<div class="page-title">&#x1F6E1; 风险管理看板</div><div class="risk-stats-row"><div class="risk-stat-card"><div class="val" style="color:#3b82f6">'+totalRisks+'</div><div class="lbl">风险/问题总数</div></div><div class="risk-stat-card"><div class="val" style="color:#f59e0b">'+openRisks+'</div><div class="lbl">活跃风险</div></div><div class="risk-stat-card"><div class="val" style="color:#10b981">'+closedRisks+'</div><div class="lbl">已解决</div></div><div class="risk-stat-card"><div class="val" style="color:#ef4444">'+highSev+'</div><div class="lbl">高严重度</div></div></div><div class="bubble-section"><div class="section-header"><h3>&#x1F9EE; 风险类别分布</h3><span style="font-size:11px;color:#94a3b8">气泡大小=风险数量 | 颜色=风险类别</span></div><div class="bubble-row"><div class="bubble-container"><div class="bubble-canvas-wrap"><canvas id="bubbleChart"></canvas></div></div><div class="risk-type-chart-panel"><h3>&#x1F4CA; 七种风险类型</h3><div class="risk-type-chart-wrap"><canvas id="riskTypeChart"></canvas></div></div></div></div><div class="risk-table-wrap"><div class="section-header"><h3>&#x1F4CB; 风险/问题汇总 ('+totalRisks+')</h3><div><select class="risk-filter" onchange="filterRiskDashboard()" id="riskSeverityFilter"><option value="all">全部严重度</option><option value="high">高</option><option value="medium">中</option><option value="low">低</option></select><select class="risk-filter" onchange="filterRiskDashboard()" id="riskCategoryFilter"><option value="all">全部类别</option>'+RISK_CATEGORIES.map(function(c){return'<option value="'+c+'">'+c+'</option>';}).join("")+'</select><select class="risk-filter" onchange="sortRiskDashboard()" id="riskSortFilter"><option value="default">默认排序</option><option value="sev-desc">严重度 &#8595;</option><option value="sev-asc">严重度 &#8593;</option></select></div></div><table class="risk-table"><thead><tr><th>项目</th><th>风险描述</th><th>严重度</th><th>解决方案</th><th>负责人</th><th>解决日期</th><th>类别</th><th>状态</th></tr></thead><tbody>'+(riskRows||'<tr><td colspan="8" class="empty-state">暂无风险/问题记录</td></tr>')+'</tbody></table></div><div class="risk-analysis-panel" style="margin-top:20px"><h3>&#x1F9E0; \u90e8\u95e8\u98ce\u9669\u667a\u80fd\u5206\u6790</h3><div class="risk-analysis-placeholder" id="raPlaceholderDept">\u70b9\u51fb\u4e0b\u65b9\u6309\u94ae\uff0cAI \u5c06\u57fa\u4e8e\u5168\u90e8\u9879\u76ee\u7684\u98ce\u9669\u5386\u53f2\u751f\u6210\u90e8\u95e8\u7ea7\u667a\u80fd\u5206\u6790\u62a5\u544a</div><div class="risk-analysis-loading" id="raLoadingDept" style="display:none"><div class="risk-analysis-spinner"></div>\u6b63\u5728\u5206\u6790\u4e2d\uff0c\u8bf7\u7a0d\u5019...</div><div class="risk-analysis-result" id="raResultDept" style="display:none"></div><div class="risk-analysis-error" id="raErrorDept" style="display:none"></div><button class="risk-analysis-btn" id="raBtnDept" onclick="runDeptRiskAnalysis()">\u8fdb\u884c\u90e8\u95e8\u7ea7\u667a\u80fd\u98ce\u9669\u5206\u6790</button></div>';
+  var ca=_riskAnalysisCache["_dept"];if(ca){var rp=document.getElementById('raPlaceholderDept'),rr=document.getElementById('raResultDept'),rb=document.getElementById('raBtnDept');if(rp)rp.style.display='none';if(rr){rr.style.display='block';rr.innerHTML=renderMarkdown(ca);}if(rb)rb.textContent='刷新部门风险分析';}
+  setTimeout(function(){
+    var canvas = document.getElementById("bubbleChart");
+    if (!canvas) return;
+
+    function draw() {
+      var wrap = canvas.parentElement;
+      var W = wrap.clientWidth;
+      if (W <= 0) return;
+      var H = W * (340 / 420);
+      var dpr = window.devicePixelRatio || 1;
+
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + "px";
+      canvas.style.height = H + "px";
+
+      var ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+
+      var s = W / 420;
+
+      var bubbles = [];
+      RISK_CATEGORIES.forEach(function(cat, i) {
+        var d = chartInstances._catData[cat];
+        bubbles.push({
+          cat: cat,
+          total: d.total,
+          open: d.open,
+          closed: d.closed,
+          color: RISK_COLORS[cat],
+          idx: i
+        });
+      });
+
+      var cx = W * 0.45, cy = H * 0.48;
+      var maxR = 65 * s, minR = 20 * s;
+      var maxTotal = Math.max.apply(null, bubbles.map(function(b) { return b.total; }));
+
+      var pos = [
+        { x: cx - 60 * s, y: cy - 50 * s },
+        { x: cx + 70 * s, y: cy - 40 * s },
+        { x: cx - 80 * s, y: cy + 55 * s },
+        { x: cx + 60 * s, y: cy + 60 * s },
+        { x: cx, y: cy - 70 * s },
+        { x: cx - 20 * s, y: cy + 10 * s },
+        { x: cx + 100 * s, y: cy - 10 * s }
+      ];
+
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = Math.max(1, s);
+      ctx.setLineDash([3 * s, 3 * s]);
+      for (var i = 0; i < bubbles.length; i++)
+        for (var j = i + 1; j < bubbles.length; j++) {
+          ctx.beginPath();
+          ctx.moveTo(pos[i].x, pos[i].y);
+          ctx.lineTo(pos[j].x, pos[j].y);
+          ctx.stroke();
+        }
+      ctx.setLineDash([]);
+
+      bubbles.forEach(function(b, i) {
+        var p = pos[i] || { x: cx, y: cy };
+        var r = maxTotal > 0
+          ? minR + (b.total / maxTotal) * (maxR - minR)
+          : minR;
+
+        ctx.save();
+        ctx.shadowColor = b.color + "40";
+        ctx.shadowBlur = 15 * s;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = b.color;
+        ctx.globalAlpha = 0.88;
+        ctx.fill();
+        ctx.restore();
+
+        var grad = ctx.createRadialGradient(
+          p.x - r * 0.25, p.y - r * 0.25, r * 0.1,
+          p.x, p.y, r
+        );
+        grad.addColorStop(0, "rgba(255,255,255,0.35)");
+        grad.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.fillStyle = "#fff";
+        var catLabel = b.cat.length > 4 ? b.cat.substring(0, 4) : b.cat;
+        var fontSize1 = Math.max(9 * s, r * 0.38);
+        ctx.font = "bold " + fontSize1 + "px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(catLabel, p.x, p.y - r * 0.15);
+
+        var fontSize2 = Math.max(14 * s, r * 0.55);
+        ctx.font = "bold " + fontSize2 + "px sans-serif";
+        ctx.fillText(b.total, p.x, p.y + r * 0.3);
+      });
+    }
+
+    draw();
+
+    var ro = new ResizeObserver(function() { draw(); });
+    ro.observe(canvas.parentElement);
+    chartInstances._drawBubble = draw;
+    var rc = document.getElementById("riskTypeChart");
+    if (rc) {
+      var rWrap = rc.parentElement;
+      var rW = rWrap.clientWidth;
+      var rH = rWrap.clientHeight || 280;
+      var rdpr = window.devicePixelRatio || 1;
+      rc.width = rW * rdpr;
+      rc.height = rH * rdpr;
+      rc.style.width = rW + "px";
+      rc.style.height = rH + "px";
+
+      var catLabels = RISK_CATEGORIES;
+      var highData = [], medData = [], lowData = [];
+      catLabels.forEach(function(c) {
+        var d = catSevData[c] || {high:0, medium:0, low:0};
+        highData.push(d.high); medData.push(d.medium); lowData.push(d.low);
+      });
+
+      chartInstances.riskTypeChart = new Chart(rc.getContext("2d"), {
+        type: "bar",
+        data: {
+          labels: catLabels,
+          datasets: [
+            {label:"高",data:highData,backgroundColor:"#ef4444",borderRadius:0},
+            {label:"中",data:medData,backgroundColor:"#f59e0b",borderRadius:0},
+            {label:"低",data:lowData,backgroundColor:"#10b981",borderRadius:0}
+          ]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {position:"bottom",labels:{boxWidth:10,padding:8,font:{family:"Microsoft YaHei, PingFang SC, sans-serif",size:10}}}
+          },
+          scales: {
+            x: {stacked:true,beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},
+            y: {stacked:true,ticks:{font:{size:9}}}
+          }
+        }
+      });
+
+      var rro = new ResizeObserver(function() {
+        var rW2 = rWrap.clientWidth;
+        var rH2 = rWrap.clientHeight || 280;
+        rc.width = rW2 * rdpr;
+        rc.height = rH2 * rdpr;
+        rc.style.width = rW2 + "px";
+        rc.style.height = rH2 + "px";
+        if (chartInstances.riskTypeChart) { chartInstances.riskTypeChart.resize(); }
+      });
+      rro.observe(rWrap);
+    }
+  }, 150);
+}
+
+function recomputeRiskData(){
+  var cd={};RISK_CATEGORIES.forEach(function(c){cd[c]={total:0,issues:0,risks:0,open:0,closed:0};});
+  var sd={};RISK_CATEGORIES.forEach(function(c){sd[c]={high:0,medium:0,low:0};});
+  PROJECTS.forEach(function(p){(p.risks||[]).forEach(function(r){if(resolvedSet[r.id])return;var cat=r.category||"进度风险";if(!cd[cat])cat="进度风险";cd[cat].total++;if(r.concernType==="Issue")cd[cat].issues++;else cd[cat].risks++;var sev=(r.concernType==="Issue"?10:(r.possibility||0))*(r.impact||0),sevCls=sev>=70?"high":(sev>=35?"medium":"low");sd[cat][sevCls]++;});});
+  chartInstances._catData=cd;chartInstances._catSevData=sd;
+}
+function updateRiskCharts(){
+  recomputeRiskData();
+  if(chartInstances.riskTypeChart){var sd=chartInstances._catSevData;var high=[],med=[],low=[];RISK_CATEGORIES.forEach(function(c){var d=sd[c]||{high:0,medium:0,low:0};high.push(d.high);med.push(d.medium);low.push(d.low);});chartInstances.riskTypeChart.data.datasets[0].data=high;chartInstances.riskTypeChart.data.datasets[1].data=med;chartInstances.riskTypeChart.data.datasets[2].data=low;chartInstances.riskTypeChart.update();}
+  if(chartInstances._drawBubble)chartInstances._drawBubble();
+}
+
+function updateResolvedStats(){var all=[];PROJECTS.forEach(function(p){(p.risks||[]).forEach(function(r){all.push(r);});});var closed=all.filter(function(r){return resolvedSet[r.id]||false;}).length;var cards=document.querySelectorAll('.risk-stat-card');cards.forEach(function(card){var lbl=card.querySelector('.lbl');if(lbl&&lbl.textContent.indexOf('活跃风险')>=0)card.querySelector('.val').textContent=all.length-closed;if(lbl&&lbl.textContent.indexOf('已解决')>=0)card.querySelector('.val').textContent=closed;});}
+function filterRiskDashboard(){var sf=document.getElementById("riskSeverityFilter").value,cf=document.getElementById("riskCategoryFilter").value;document.querySelectorAll(".risk-table tbody tr").forEach(function(row){var sev=row.getAttribute("data-severity"),cat=row.getAttribute("data-category"),show=true;if(sf!=="all"&&sev!==sf)show=false;if(cf!=="all"&&cat!==cf)show=false;row.style.display=show?"":"none";});}function sortRiskDashboard(){var sv=document.getElementById("riskSortFilter").value;var tb=document.querySelector(".risk-table tbody");if(!tb)return;var rows=Array.from(tb.querySelectorAll("tr"));if(sv==="default"){rows.sort(function(a,b){return(parseInt(a.getAttribute("data-original-index"))||0)-(parseInt(b.getAttribute("data-original-index"))||0);});}else{rows.sort(function(a,b){var av=parseInt(a.getAttribute("data-sev-value"))||0,bv=parseInt(b.getAttribute("data-sev-value"))||0;return sv==="sev-desc"?bv-av:av-bv;});}rows.forEach(function(r){tb.appendChild(r);});}function toggleRiskResolved(riskId){resolvedSet[riskId]=!resolvedSet[riskId];var btns=document.querySelectorAll('.risk-toggle-btn[data-risk-id="'+riskId+'"]');btns.forEach(function(btn){if(resolvedSet[riskId]){btn.textContent='已解决';btn.classList.add('resolved');}else{btn.textContent='未解决';btn.classList.remove('resolved');}});updateResolvedStats();updateRiskCharts();}
+function renderProject(p,idx){
+  destroyCharts();
+  var dop=p.dop||{},st=statusInfo(dop["Overall Status"]),main=document.getElementById("mainContent");window._currentIO=dop["IO Number"]||"";
+  var name=escapeHtml(dop["Project Name"]||("项目"+(idx+1)));
+  var ifs=[["IO Number",dop["IO Number"]],["报告日期",fmtDate(dop["Report Date: YYYY/MM/DD"])],["品牌",dop["Brand"]],["业务域",dop["Business Domain"]],["业务Sponsor",dop["Business Sponsor"]],["IT Sponsor",dop["IT Sponsor"]],["IT PM",dop["IT Project Manager"]],["业务PM",dop["Business Project Manager"]],["Kick-off",fmtDate(dop["Kick - off"])],["计划结束",fmtDate(dop["End date"])],["重定结束",fmtDate(dop["Rebaselined end date"])],["当前阶段",dop["Current Project Phase"]]];
+  var irs="";ifs.forEach(function(f){if(f[1]!==undefined&&f[1]!==null&&f[1]!=="")irs+='<div class="info-row"><span class="info-label">'+f[0]+'</span><span class="info-value">'+escapeHtml(String(f[1]))+'</span></div>';});var irsGrid="";ifs.forEach(function(f){if(f[1]!==undefined&&f[1]!==null&&f[1]!=="")irsGrid+='<div class="info-grid-item"><span class="info-grid-label">'+f[0]+'</span><span class="info-grid-value">'+escapeHtml(String(f[1]))+'</span></div>';});
+  var tr="";[["时间",dop["Time"]],["成本",dop["Cost"]],["范围",dop["Scope"]],["资源",dop["Resources"]]].forEach(function(f){var si=statusInfo(f[1]);tr+='<div class="status-mini-card"><span class="status-mini-dot '+si.dot+'"></span><span class="status-mini-label">'+f[0]+'</span><span class="status-mini-value">'+si.label+'</span></div>';});
+  var gh="";(p.gatts||[]).forEach(function(g){var dc=(g.status==="Green")?"done":((g.status==="Yellow"||g.status==="Red")?"progress":"pending");gh+='<div class="gate-item"><div class="gate-dot '+dc+'"></div><div class="gate-body"><div class="gate-name">'+escapeHtml(g.milestone||"")+'</div><div class="gate-date">'+fmtDate(g.beginDate)+' ~ '+fmtDate(g.endDate)+'</div></div></div>';});
+  var gh_h="";(p.gatts||[]).forEach(function(g,i){var dc=(g.status==="Green")?"done":((g.status==="Yellow"||g.status==="Red")?"progress":"pending");if(i>0)gh_h+='<div class="gate-h-connector '+dc+'"></div>';gh_h+='<div class="gate-h-item"><div class="gate-h-dot '+dc+'"></div><div class="gate-h-name">'+escapeHtml(g.milestone||"")+'</div><div class="gate-h-date">'+fmtDate(g.beginDate)+' ~ '+fmtDate(g.endDate)+'</div></div>';});
+  var risks=p.risks||[],rfh="";
+  if(risks.length===0){rfh='<div class="empty-state">&#x2705; 该项目暂无风险记录</div>';}
+  else{risks.forEach(function(r,rIdx){var ir=resolvedSet[r.id]||false,is=r.concernType==="Issue",sv=(r.concernType==="Issue"?10:(r.possibility||0))*(r.impact||0),sl=sv>=70?"高":(sv>=35?"中":"低");var sevCls=ir?"severity-resolved":(sv>=70?"severity-high":(sv>=35?"severity-medium":"severity-low"));var fh='<div class="flow-indicator"><span class="flow-dot '+sevCls+'"></span><span class="flow-type-tag '+(is?"issue":"risk")+'">'+(is?"Issue":"Risk")+'</span></div>';rfh+='<div class="risk-flow-item">'+fh+'<div class="flow-body"><div class="flow-desc"><strong>'+escapeHtml(r.category||"")+'</strong> | '+escapeHtml(r.description||"")+'</div><div class="flow-meta"><span>严重度: '+sl+' ('+sv+')</span><span>负责人: '+escapeHtml(r.owner||"-")+'</span><span class="flow-status-badge '+(ir?"resolved":"open")+'">'+(ir?"&#x2713; 已解决":"&#x26A0; 活跃")+'</span></div>'+(r.mitigation?'<div style="font-size:10px;color:#64748b;margin-top:2px">缓解措施: '+escapeHtml(r.mitigation)+'</div>':"")+'</div></div>';});}
+  main.innerHTML='<div class="detail-header"><div class="detail-header-top"><div class="dh-left"><h2>'+name+'</h2></div><div class="dh-meta"><span class="card-badge '+st.badge+'" style="font-size:12px;padding:4px 14px">'+st.label+'</span><div class="status-mini-cards">'+tr+'</div></div></div><div class="detail-info-grid">'+irsGrid+'</div></div><div class="detail-gate-panel"><h3>&#x1F3AF; 门禁节点</h3><div class="gate-timeline">'+(gh_h||'<div class="empty-state">暂无门禁节点</div>')+'</div></div><div class="detail-grid-two"><div class="detail-panel"><h3>&#x1F4DD; 本周主要成果</h3>'+(dop["Key Achievements in the current period"]?'<div class="info-text">'+escapeHtml(dop["Key Achievements in the current period"]||"").replace(/\n/g,"<br>")+'</div>':'<div class="empty-state">暂无</div>')+'</div><div class="detail-panel"><h3>&#x1F3AF; 下阶段重点</h3>'+(dop["Priorities for Next Period"]?'<div class="info-text">'+escapeHtml(dop["Priorities for Next Period"]||"").replace(/\n/g,"<br>")+'</div>':'<div class="empty-state">暂无</div>')+'</div></div><div class="detail-two-col"><div class="detail-left"><div class="detail-panel" style="margin-bottom:16px"><h3>&#x1F6E1; 风险流动情况 ('+risks.length+')</h3><div style="font-size:10px;color:#94a3b8;margin-bottom:10px">&#x1F534; 高 &#x1F7E1; 中 &#x1F7E2; 低 — 严重程度 | &#x1F535; 已解决</div>'+rfh+'</div></div><div class="detail-right"><div class="risk-analysis-panel"><h3>&#x1F9E0; 智能风险分析</h3><div class="risk-analysis-placeholder" id="raPlaceholder">点击下方按钮，AI 将基于该项目风险历史生成智能分析报告</div><div class="risk-analysis-loading" id="raLoading" style="display:none"><div class="risk-analysis-spinner"></div>正在分析中，请稍候...</div><div class="risk-analysis-result" id="raResult" style="display:none"></div><div class="risk-analysis-error" id="raError" style="display:none"></div><button class="risk-analysis-btn" id="raBtn" onclick="runRiskAnalysis(window._currentIO)">进行智能风险分析</button></div></div></div>';
+  var ca=_riskAnalysisCache[dop["IO Number"]||""];if(ca){var rp=document.getElementById('raPlaceholder'),rr=document.getElementById('raResult'),rb=document.getElementById('raBtn');if(rp)rp.style.display='none';if(rr){rr.style.display='block';rr.innerHTML=renderMarkdown(ca);}if(rb)rb.textContent='刷新智能风险分析';}
+}
+
+
+
+
+function runRiskAnalysis(io){var ph=document.getElementById('raPlaceholder'),ld=document.getElementById('raLoading'),rs=document.getElementById('raResult'),er=document.getElementById('raError'),bt=document.getElementById('raBtn');if(!ph)return;delete _riskAnalysisCache[io];ph.style.display='none';rs.style.display='none';er.style.display='none';ld.style.display='flex';bt.disabled=true;setTimeout(function(){ld.style.display='none';bt.disabled=false;er.style.display='block';er.textContent='静态快照暂不支持在线 AI 风险分析，请启动本地服务 127.0.0.1:5001 查看完整分析。';},300);}
+
+function runDeptRiskAnalysis(){var ph=document.getElementById('raPlaceholderDept'),ld=document.getElementById('raLoadingDept'),rs=document.getElementById('raResultDept'),er=document.getElementById('raErrorDept'),bt=document.getElementById('raBtnDept');if(!ph)return;delete _riskAnalysisCache["_dept"];ph.style.display='none';rs.style.display='none';er.style.display='none';ld.style.display='flex';bt.disabled=true;setTimeout(function(){ld.style.display='none';bt.disabled=false;er.style.display='block';er.textContent='静态快照暂不支持在线 AI 风险分析，请启动本地服务 127.0.0.1:5001 查看完整分析。';},300);}
+function renderMarkdown(md){
+  if(!md)return"";
+  if(typeof marked!=="undefined"){
+    marked.use({breaks:true,gfm:true});
+    return marked.parse(md);
+  }
+  // Fallback: basic rendering
+  var h=escapeHtml(md);
+  h=h.replace(/### (.+)/g,"<h3>$1</h3>");
+  h=h.replace(/## (.+)/g,"<h2>$1</h2>");
+  h=h.replace(/# (.+)/g,"<h1>$1</h1>");
+  h=h.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+  h=h.replace(/\n\n/g,"</p><p>");
+  h=h.replace(/\n/g,"<br>");
+  h="<p>"+h+"</p>";
+  return h;
+}
+</script>
+</body>
+</html>
