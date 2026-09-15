@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倪卉奕 | 新媒体运营与 AI 作品集</title>
+    <meta name="description" content="倪卉奕 - 新加坡国立大学统计学硕士，上海财经大学会计学学士。新媒体运营、活动运营与 AI 实践作品集。">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">倪卉奕<span class="logo-dot"></span></a>
+            <div class="nav-links" id="navLinks">
+                <a href="#about" class="nav-link">关于</a>
+                <a href="#education" class="nav-link">教育</a>
+                <a href="#experience" class="nav-link">经历</a>
+                <a href="#projects" class="nav-link">项目</a>
+                <a href="#skills" class="nav-link">兴趣</a>
+                <a href="#contact" class="nav-link">联系</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-bg">
+            <div class="blob blob-pink"></div>
+            <div class="blob blob-blue"></div>
+            <div class="blob blob-yellow"></div>
+            <div class="blob blob-green"></div>
+            <div class="blob blob-purple"></div>
+        </div>
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="title-line">你好呀，我是</span>
+                    <span class="title-name">倪卉奕</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span class="typing-text" id="typingText"></span><span class="cursor">|</span>
+                </p>
+                <p class="hero-desc">
+                    用内容连接人，也用数据改进内容<br>
+                    把用户需求转化为活动方案与持续传播 ✨
+                </p>
+                <div class="hero-actions">
+                    <a href="#contact" class="btn btn-primary">联系我</a>
+                    <a href="assets/portfolio/倪卉奕_新媒体运营与AI作品集.pdf" class="btn btn-secondary" target="_blank" rel="noopener">查看完整作品集</a>
+                </div>
+            </div>
+            <div class="hero-photos">
+                <div class="photo-card photo-main">
+                    <img src="assets/photos/sufe-grad-podium.jpg" alt="倪卉奕 上海财经大学毕业典礼">
+                    <span class="photo-tag tag-grad">🎓 毕业季</span>
+                </div>
+                <div class="photo-card photo-side">
+                    <img src="assets/photos/mountain-prayerflags.jpg" alt="倪卉奕 藏区旅行">
+                    <span class="photo-tag tag-travel">🌍 在路上</span>
+                </div>
+                <div class="floating-emoji emoji-1">✨</div>
+                <div class="floating-emoji emoji-2">💡</div>
+                <div class="floating-emoji emoji-3">📊</div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>向下滑动</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">01 / 关于我</span>
+                <h2 class="section-title">复合背景，<span class="hl-yellow">野蛮生长</span></h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-photo reveal">
+                    <div class="photo-carousel" id="photoCarousel">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-slide">
+                                <img src="assets/photos/sufe-grad-podium.jpg" alt="倪卉奕 上海财经大学毕业典礼">
+                                <span class="photo-tag tag-grad">🎓 上财毕业</span>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/photos/sufe-oldgate.jpg" alt="倪卉奕 国立上海商学院老校门">
+                                <span class="photo-tag tag-grad">🏫 校园记忆</span>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/photos/nus-group.jpg" alt="倪卉奕 NUS 研究生合影">
+                                <span class="photo-tag tag-edu">🌏 NUS 生活</span>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/photos/rome-trevi.jpg" alt="倪卉奕 罗马许愿池">
+                                <span class="photo-tag tag-travel">🌍 在路上</span>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/photos/annapurna-basecamp.jpg" alt="倪卉奕 安纳普尔纳大本营">
+                                <span class="photo-tag tag-travel">⛰️ ABC 徒步</span>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/photos/outdoor-club-flag.jpg" alt="倪卉奕 户外运动社团">
+                                <span class="photo-tag tag-club">🥾 社团领队</span>
+                            </div>
+                        </div>
+                        <button class="carousel-arrow prev" id="carouselPrev" aria-label="上一张">‹</button>
+                        <button class="carousel-arrow next" id="carouselNext" aria-label="下一张">›</button>
+                        <div class="carousel-dots" id="carouselDots">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text reveal">
+                    <p>我本科专业会计、研究生转向统计，习惯用两种视角看问题——既懂账本里的细节，也看得懂数据背后的业务。</p>
+                    <p>比起把事情做对，我更在意把事情做顺：梳理流程、打通协作、用工具把重复劳动自动化。工作之外，我认真生活、也认真玩。</p>
+                    <div class="about-tags">
+                        <span class="tag tag-a">数据敏感</span>
+                        <span class="tag tag-b">业务理解</span>
+                        <span class="tag tag-c">流程优化</span>
+                        <span class="tag tag-d">项目统筹</span>
+                        <span class="tag tag-e">跨团队协作</span>
+                        <span class="tag tag-f">AI工具</span>
+                    </div>
+                </div>
+            </div>
+            <div class="powers-grid">
+                <div class="power-card power-1 reveal">
+                    <div class="power-icon">🔍</div>
+                    <h3>洞察力</h3>
+                    <p>从一堆杂乱的数据和流程里，找到那个真正关键的问题。</p>
+                </div>
+                <div class="power-card power-2 reveal">
+                    <div class="power-icon">⚙️</div>
+                    <h3>落地力</h3>
+                    <p>不止会分析，更擅长把想法变成能跑起来、能复用的方案。</p>
+                </div>
+                <div class="power-card power-3 reveal">
+                    <div class="power-icon">🤝</div>
+                    <h3>连接力</h3>
+                    <p>让不同团队朝同一个目标走，把"扯皮"变成"协同"。</p>
+                </div>
+                <div class="power-card power-4 reveal">
+                    <div class="power-icon">🌱</div>
+                    <h3>生长力</h3>
+                    <p>学得快、适应强，愿意在新赛道上从零开始积累。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section section-alt">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">02 / 教育经历</span>
+                <h2 class="section-title">从上海到<span class="hl-pink">新加坡</span></h2>
+            </div>
+
+            <div class="edu-map reveal">
+                <div class="map-card">
+                    <svg viewBox="0 0 800 300" class="map-svg" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#FF4D8D"/>
+                                <stop offset="50%" stop-color="#FFD93D"/>
+                                <stop offset="100%" stop-color="#4D7CFF"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- dotted route -->
+                        <path id="route" d="M 130 210 C 280 90, 520 90, 670 180" fill="none" stroke="url(#routeGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12"/>
+                        <!-- plane moving along route -->
+                        <g class="plane">
+                            <text x="0" y="0" font-size="26" text-anchor="middle" dominant-baseline="central">✈️</text>
+                            <animateMotion dur="4s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+                                <mpath href="#route"/>
+                            </animateMotion>
+                        </g>
+                        <!-- Shanghai pin -->
+                        <g transform="translate(130,210)">
+                            <circle r="13" fill="#FF4D8D"/>
+                            <circle r="6" fill="#fff"/>
+                            <text x="0" y="38" text-anchor="middle" class="map-city">上海</text>
+                            <text x="0" y="56" text-anchor="middle" class="map-school">上海财经大学</text>
+                            <text x="0" y="73" text-anchor="middle" class="map-year">2021 – 2025</text>
+                        </g>
+                        <!-- Singapore pin -->
+                        <g transform="translate(670,180)">
+                            <circle r="13" fill="#4D7CFF"/>
+                            <circle r="6" fill="#fff"/>
+                            <text x="0" y="38" text-anchor="middle" class="map-city">新加坡</text>
+                            <text x="0" y="56" text-anchor="middle" class="map-school">国立大学 NUS</text>
+                            <text x="0" y="73" text-anchor="middle" class="map-year">2025 – 2027</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="edu-photos reveal">
+                <div class="edu-photo-card">
+                    <img src="assets/photos/sufe-oldgate.jpg" alt="上海财经大学老校门">
+                    <span>🏫 上财老校门</span>
+                </div>
+                <div class="edu-photo-card">
+                    <img src="assets/photos/sufe-grad-podium.jpg" alt="上海财经大学毕业典礼">
+                    <span>🎓 本科毕业</span>
+                </div>
+                <div class="edu-photo-card">
+                    <img src="assets/photos/nus-group.jpg" alt="NUS 研究生合影">
+                    <span>🌏 NUS 理学</span>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot dot-pink"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-period">2025.08 - 2027.06</div>
+                        <h3 class="timeline-title">新加坡国立大学</h3>
+                        <p class="timeline-subtitle">统计学硕士 · 理学院 · 新加坡</p>
+                        <p class="timeline-desc">QS世界排名前10院校</p>
+                        <div class="timeline-courses">
+                            <span>数据科学的统计基础</span>
+                            <span>网络的统计分析</span>
+                            <span>抽样统计</span>
+                            <span>空间统计学</span>
+                            <span>应用回归分析</span>
+                            <span>时间序列分析</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot dot-blue"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-period">2021.09 - 2025.06</div>
+                        <h3 class="timeline-title">上海财经大学</h3>
+                        <p class="timeline-subtitle">会计学（会计与财务实验班）· 本科 · 会计学院 · 上海</p>
+                        <p class="timeline-desc">211工程院校</p>
+                        <div class="timeline-awards">
+                            <div class="award-item"><span class="award-icon">🏆</span><span>本科优秀毕业生</span></div>
+                            <div class="award-item"><span class="award-icon">🏆</span><span>人民奖学金（2021-2023连续两年）</span></div>
+                            <div class="award-item"><span class="award-icon">🏆</span><span>徐政旦社会奖学金（前5%）</span></div>
+                            <div class="award-item"><span class="award-icon">🏆</span><span>暑期千村调查二等奖</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">03 / 实习经历</span>
+                <h2 class="section-title">把分析<span class="hl-blue">做进业务</span></h2>
+            </div>
+            <div class="exp-grid">
+                <div class="exp-card exp-1 reveal clickable" data-exp="amer" role="button" tabindex="0" aria-label="查看亚玛芬实习产出看板">
+                    <div class="exp-card-header">
+                        <div class="exp-company">亚玛芬体育 AmerSports</div>
+                        <div class="exp-time">2026.07 - 至今</div>
+                    </div>
+                    <div class="exp-role">PMO 项目管理岗</div>
+                    <ul class="exp-list">
+                        <li><strong>智能提效：</strong>自主搭建AI可视化工作流平台，将高频重复工作配置自动化链路，整体处理时效提升<span class="highlight">30%</span></li>
+                        <li><strong>进度管控：</strong>负责<span class="highlight">32个</span>信息化项目全周期进度跟踪，推动跨团队风险闭环</li>
+                        <li><strong>看板运维：</strong>搭建项目可视化管理看板，辅助管理层决策；运营PowerBI看板</li>
+                    </ul>
+                    <div class="exp-hint">点击查看实习产出看板 →</div>
+                </div>
+                <div class="exp-card exp-2 reveal">
+                    <div class="exp-card-header">
+                        <div class="exp-company">普罗旺斯欧舒丹贸易有限公司（L'OCCITANE）</div>
+                        <div class="exp-time">2025.04 - 2025.08</div>
+                    </div>
+                    <div class="exp-role">供应链运营岗</div>
+                    <ul class="exp-list">
+                        <li><strong>库存管理：</strong>每日归集 WMS 仓储���库、进口在途物资及线下门店多维度库存数据，覆盖 200+ 美妆 SKU，输出全渠道库存总表，完成到货核验与状态动态更新，保障数据精准可追溯</li>
+                        <li><strong>指标测算：</strong>完成预测准确率、库存满足率两大核心 KPI 测算，按月周期对比销量预测与实际销售数据，完成节日促销、主推品更迭等偏差归因，实时触发缺货预警</li>
+                        <li><strong>协同运营：</strong>协助在 OMS 系统完成商品建码与 SKU 主数据维护，对接前端销售团队结合门店动销数据协助跨店分货调配，跟进进口订单履约，输出运营报表支撑全流程运转</li>
+                    </ul>
+                </div>
+                <div class="exp-card exp-3 reveal">
+                    <div class="exp-card-header">
+                        <div class="exp-company">XTransfer</div>
+                        <div class="exp-time">2024.10 - 2025.03</div>
+                    </div>
+                    <div class="exp-role">流程运营岗</div>
+                    <ul class="exp-list">
+                        <li><strong>流程协同：</strong>梳理跨团队协作流程，推动协同响应及时率提升至<span class="highlight">90%</span>，问题处理时效提升<span class="highlight">20%</span></li>
+                        <li><strong>项目管理：</strong>支持"五方协同"流程优化，推动已上线协同场景实现SLA可视化管理，场景使用率达<span class="highlight">80%</span></li>
+                        <li><strong>数据运营：</strong>定期整理运营数据，跟踪响应、完结等指标，支持业务复盘</li>
+                    </ul>
+                </div>
+                <div class="exp-card exp-4 reveal">
+                    <div class="exp-card-header">
+                        <div class="exp-company">普华永道 PwC</div>
+                        <div class="exp-time">2024.01 - 2024.03</div>
+                    </div>
+                    <div class="exp-role">EG1 审计岗位</div>
+                    <ul class="exp-list">
+                        <li><strong>审计工作：</strong>对多家上市公司进行年度审计和IPO审计，核对修订财务工作底稿，进行实质性测试程序</li>
+                        <li><strong>函证工作：</strong>协助准备<span class="highlight">400+</span>封函证附件，完成发函过程并解决回函差异问题</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section section-alt">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">04 / 项目经历</span>
+                <h2 class="section-title">让内容与数据<span class="hl-green">一起说话</span></h2>
+                <p class="section-intro">从内容策划、活动执行到数据复盘与 AI 工作流，以下是三个代表性项目。完整案例与视觉稿可在作品集中查看。</p>
+                <a href="assets/portfolio/倪卉奕_新媒体运营与AI作品集.pdf" class="portfolio-download" target="_blank" rel="noopener">打开 14 页完整作品集 ↗</a>
+            </div>
+            <div class="projects-grid">
+                <a class="project-card project-3 reveal" href="assets/portfolio/倪卉奕_新媒体运营与AI作品集.pdf" target="_blank" rel="noopener" aria-label="查看新媒体运营与 AI 实践完整作品集">
+                    <div class="project-cover"><img src="assets/portfolio/content-operations.png" alt="PMO 知识海报系列作品"></div>
+                    <div class="project-icon">✍️</div>
+                    <h3 class="project-title">内容运营与活动策划</h3>
+                    <p class="project-tagline">公众号 · 短视频 · 知识海报 · 线下活动</p>
+                    <p class="project-desc">围绕用户需求完成选题、内容表达、活动招募与现场执行；将现场素材沉淀为持续传播内容，并用阅读表现与用户反馈推动下一轮优化。</p>
+                    <div class="project-metrics">
+                        <div class="metric"><span class="metric-value">20+</span><span class="metric-label">职业与校友活动</span></div>
+                        <div class="metric"><span class="metric-value">5000+</span><span class="metric-label">覆盖学生用户</span></div>
+                        <div class="metric"><span class="metric-value">3000+</span><span class="metric-label">公众号平均阅读</span></div>
+                    </div>
+                    <div class="project-tags">
+                        <span>内容策划</span><span>活动运营</span><span>视觉表达</span><span>AI 辅助创作</span>
+                    </div>
+                    <span class="project-cta">查看完整作品集 →</span>
+                </a>
+                <div class="project-card project-1 reveal clickable" data-project="sales" role="button" tabindex="0" aria-label="查看销售运营项目成果">
+                    <div class="project-cover"><img src="assets/photos/sales-analytics.jpg" alt="销售运营经营分析报告"></div>
+                    <div class="project-icon">📈</div>
+                    <h3 class="project-title">销售运营经营分析</h3>
+                    <p class="project-tagline">Walmart 42.2万条销售记录分析</p>
+                    <p class="project-desc">基于Walmart 42.2万条门店-部门周度销售记录，完成数据质量检查，建立经营指标体系。采用滚动审核方式对比三类预测方法，测试期预测准确度达94.5%。</p>
+                    <div class="project-metrics">
+                        <div class="metric"><span class="metric-value">94.5%</span><span class="metric-label">预测准确度</span></div>
+                        <div class="metric"><span class="metric-value">-0.6%</span><span class="metric-label">预测偏差</span></div>
+                        <div class="metric"><span class="metric-value">4</span><span class="metric-label">风险单元识别</span></div>
+                    </div>
+                    <div class="project-tags">
+                        <span>数据清洗</span><span>经营分析</span><span>预测模型</span><span>可视化看板</span>
+                    </div>
+                    <span class="project-cta">查看完整成果 →</span>
+                </div>
+                <div class="project-card project-2 reveal clickable" data-project="inventory" role="button" tabindex="0" aria-label="查看库存分析项目成果">
+                    <div class="project-cover"><img src="assets/photos/inventory.jpg" alt="库存分析交互看板"></div>
+                    <div class="project-icon">📦</div>
+                    <h3 class="project-title">库存分析与智能补货决策系统</h3>
+                    <p class="project-tagline">Olist 10万笔电商订单分析</p>
+                    <p class="project-desc">基于300个重点SKU完成需求分析、ABC/XYZ分类及28天需求预测。结合履约时效和安全库存，建立自动补货模型并输出SKU级补货建议。</p>
+                    <div class="project-metrics">
+                        <div class="metric"><span class="metric-value">+5.89%</span><span class="metric-label">FillRate提升</span></div>
+                        <div class="metric"><span class="metric-value">-36.2%</span><span class="metric-label">缺货率下降</span></div>
+                        <div class="metric"><span class="metric-value">-20.9%</span><span class="metric-label">综合成本下降</span></div>
+                    </div>
+                    <div class="project-tags">
+                        <span>需求预测</span><span>ABC/XYZ分类</span><span>自动补货模型</span><span>交互式Dashboard</span>
+                    </div>
+                    <span class="project-cta">查看完整成果 →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills / Interests Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">05 / 专业技能 & 兴趣</span>
+                <h2 class="section-title">我的<span class="hl-purple">工具箱</span></h2>
+            </div>
+            <div class="skills-wrapper">
+                <div class="skill-group reveal">
+                    <h3 class="skill-group-title">🛠 专业技能</h3>
+                    <div class="skill-bars">
+                        <div class="skill-bar">
+                            <div class="skill-info"><span>Python</span><span>数据分析 · 建模</span></div>
+                            <div class="skill-track"><div class="skill-fill fill-a" data-width="88%"></div></div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info"><span>PowerBI</span><span>数据可视化</span></div>
+                            <div class="skill-track"><div class="skill-fill fill-b" data-width="85%"></div></div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info"><span>项目管理</span><span>全周期跟踪</span></div>
+                            <div class="skill-track"><div class="skill-fill fill-c" data-width="90%"></div></div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info"><span>AI工具</span><span>自动化工作流</span></div>
+                            <div class="skill-track"><div class="skill-fill fill-d" data-width="82%"></div></div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-info"><span>财务分析</span><span>估值 · 内控</span></div>
+                            <div class="skill-track"><div class="skill-fill fill-e" data-width="85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-group reveal">
+                    <h3 class="skill-group-title">🌟 社团与领导力</h3>
+                    <div class="activity-cards">
+                        <div class="activity-card act-1">
+                            <div class="activity-img"><img src="assets/photos/nus-photobooth.jpg" alt="NUS 学生活动"></div>
+                            <div class="activity-body">
+                                <div class="activity-icon">🎓</div>
+                                <h4>NUS 研究生学生大使</h4>
+                                <p class="activity-time">2025.08 - 至今</p>
+                                <p><strong>活动策划：</strong>对接校方行政、企业嘉宾与研究生群体，调研学生求职痛点，完成 20+ 场职业分享、校友沙龙活动前期策划、嘉宾邀约与资源协调工作，锚定活动选题方向</p>
+                                <p><strong>社群运营：</strong>负责活动宣传推广、现场统筹、复盘迭代全流程，累计触达 5000+ 在校研究生；收集学生反馈持续迭代活动形式，提升社群活跃度，锤炼多方协同与大型活动风险预判能力</p>
+                            </div>
+                        </div>
+                        <div class="activity-card act-2">
+                            <div class="activity-img"><img src="assets/photos/outdoor-club-flag.jpg" alt="户外运动社团"></div>
+                            <div class="activity-body">
+                                <div class="activity-icon">🥾</div>
+                                <h4>稻草人户外运动社团领队</h4>
+                                <p class="activity-time">2023.09 - 2025.06</p>
+                                <p><strong>活动统筹：</strong>主导 20+ 场徒步、团建活动落地，完成线路勘察、预算核算、人员分工与应急预案制定，把控现场执行与安全保障，服务社团 200+ 成员，保障活动安全有序开展</p>
+                                <p><strong>内容增流：</strong>运营公众号、小红书新媒体账号，独立完成选题、文案撰写与发布，产出活动纪实、户外攻略内容，推文平均阅读 3000+，带动粉丝增长 20%，扩大社团影响力</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarot -->
+                <div class="skill-group reveal">
+                    <h3 class="skill-group-title">🎴 抽一张我的「兴趣塔罗」</h3>
+                    <div class="tarot">
+                        <div class="tarot-stage">
+                            <div class="tarot-card" id="tarotCard">
+                                <div class="tarot-face tarot-back">
+                                    <div class="tarot-back-symbol">✦</div>
+                                    <div class="tarot-back-text">点击抽牌</div>
+                                </div>
+                                <div class="tarot-face tarot-front" id="tarotFront">
+                                    <div class="tarot-emoji" id="tarotEmoji">🌟</div>
+                                    <div class="tarot-cardname" id="tarotCardName">？？？</div>
+                                    <div class="tarot-meaning" id="tarotMeaning"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="tarot-draw" id="tarotDraw">🎴 抽一张</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+        <div class="hero-bg">
+            <div class="blob blob-pink"></div>
+            <div class="blob blob-blue"></div>
+        </div>
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">06 / 联系我</span>
+                <h2 class="section-title">期待<span class="hl-pink">交流</span> ☕</h2>
+            </div>
+            <div class="contact-grid reveal">
+                <div class="contact-card cc-1">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-info">
+                        <span class="contact-label">邮箱</span>
+                        <a href="mailto:nihuiyi@163.sufe.edu.cn" class="contact-value">nihuiyi@163.sufe.edu.cn</a>
+                    </div>
+                </div>
+                <div class="contact-card cc-2">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-info">
+                        <span class="contact-label">电话</span>
+                        <a href="tel:+8613585747197" class="contact-value">135 8574 7197</a>
+                    </div>
+                </div>
+                <div class="contact-card cc-3">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-info">
+                        <span class="contact-label">当前所在地</span>
+                        <span class="contact-value">上海 · Shanghai</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-cta reveal">
+                <p>如果你对我的经历感兴趣，欢迎随时找我聊聊！🙌</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 倪卉奕 · Made with 💛 & vibes</p>
+        </div>
+    </footer>
+
+    <!-- Experience / Internship Output Modal -->
+    <div class="modal-overlay" id="experienceModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="亚玛芬实习产出看板">
+        <div class="modal-box exp-modal">
+            <button class="modal-close" id="expModalClose" aria-label="关闭">×</button>
+            <div class="exp-modal-head">
+                <div class="exp-modal-title">亚玛芬体育 · 项目管理看板</div>
+                <div class="exp-modal-sub">实习产出 · 32 个信息化项目全周期跟踪与风险可视</div>
+            </div>
+            <div class="exp-iframe-wrap">
+                <div class="exp-loading" id="expLoading">
+                    <div class="exp-spinner"></div>
+                    <p class="exp-loading-main">正在加载本地看板…</p>
+                    <p class="exp-loading-note">若长时间未显示，请检查快照文件是否完整</p>
+                </div>
+                <iframe id="expFrame" class="exp-iframe" title="亚玛芬实习项目管理看板" allow="fullscreen"></iframe>
+            </div>
+            <div class="exp-modal-foot">
+                <span class="exp-foot-status">🟢 静态快照 · 已内嵌数据，无需本地服务</span>
+                <a href="assets/projects/amer-dashboard/index.html" target="_blank" rel="noopener" class="exp-foot-link">在新标签打开 ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Achievement Modal -->
+    <div class="modal-overlay" id="projectModal" aria-hidden="true">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+
+            <!-- 销售运营 -->
+            <div class="project-detail" id="detail-sales" hidden>
+                <div class="detail-head detail-sales">
+                    <div class="detail-icon">📈</div>
+                    <div>
+                        <h2 class="detail-title" id="modalTitle">零售销售运营分析 · 需求预测与备货测算</h2>
+                        <p class="detail-tagline">Walmart 42.2 万条门店-部门周度销售记录</p>
+                    </div>
+                </div>
+                <p class="detail-overview">基于沃尔玛公开竞赛的 42.2 万条门店-部门周度销售记录，完成主键、缺失值及负销售额检查，选取重点门店与部门建立销售规模、同比增长、贡献度及波动性等经营指标，形成可追溯的数据质量记录和经营分析看板。</p>
+
+                <div class="detail-metrics">
+                    <div class="d-metric"><span class="d-value">94.5%</span><span class="d-label">整体预测准确度</span></div>
+                    <div class="d-metric"><span class="d-value">-0.6%</span><span class="d-label">预测偏差</span></div>
+                    <div class="d-metric"><span class="d-value">7,108</span><span class="d-label">经营单元分析</span></div>
+                    <div class="d-metric"><span class="d-value">4</span><span class="d-label">风险经营单元</span></div>
+                    <div class="d-metric"><span class="d-value">¥2.39亿</span><span class="d-label">最近52周销售额</span></div>
+                    <div class="d-metric"><span class="d-value">+3.4%</span><span class="d-label">同比增长</span></div>
+                </div>
+
+                <div class="detail-charts">
+  <div class="chart-card">
+    <h4 class="chart-title">📈 周度销售额趋势（2010–2012 · 144 周）</h4>
+    <svg viewBox="0 0 700 260" class="chart-svg-el" role="img" aria-label="周度销售额趋势">
+  <line x1="50" y1="24.0" x2="680" y2="24.0" stroke="#eee" stroke-width="1"/><line x1="50" y1="92.7" x2="680" y2="92.7" stroke="#eee" stroke-width="1"/><line x1="50" y1="161.3" x2="680" y2="161.3" stroke="#eee" stroke-width="1"/><line x1="50" y1="230.0" x2="680" y2="230.0" stroke="#eee" stroke-width="1"/>
+  <path d="M 50 230 50.0 113.3 L 54.4 140.7 L 58.9 147.8 L 63.3 170.4 L 67.7 149.1 L 72.2 166.0 L 76.6 181.5 L 81.1 210.7 L 85.5 176.9 L 89.9 199.2 L 94.4 184.7 L 98.8 193.7 L 103.2 202.1 L 107.7 167.0 L 112.1 187.0 L 116.5 190.8 L 121.0 194.3 L 125.4 186.6 L 129.9 177.2 L 134.3 176.1 L 138.7 198.8 L 143.2 179.8 L 147.6 197.6 L 152.0 190.6 L 156.5 203.0 L 160.9 203.2 L 165.4 185.6 L 169.8 178.5 L 174.2 179.5 L 178.7 201.6 L 183.1 177.5 L 187.5 189.4 L 192.0 189.4 L 196.4 210.1 L 200.8 204.9 L 205.3 183.5 L 209.7 196.0 L 214.2 203.3 L 218.6 211.3 L 223.0 176.7 L 227.5 169.7 L 231.9 177.3 L 236.3 36.5 L 240.8 176.0 L 245.2 145.2 L 249.6 116.3 L 254.1 24.0 L 258.5 230.0 L 263.0 179.1 L 267.4 172.6 L 271.8 176.2 L 276.3 191.3 L 280.7 133.2 L 285.1 124.5 L 289.6 138.4 L 294.0 164.4 L 298.5 148.0 L 302.9 160.0 L 307.3 174.1 L 311.8 197.9 L 316.2 190.3 L 320.6 172.2 L 325.1 179.4 L 329.5 174.0 L 333.9 218.8 L 338.4 172.5 L 342.8 186.3 L 347.3 192.3 L 351.7 199.4 L 356.1 188.9 L 360.6 175.9 L 365.0 168.5 L 369.4 194.2 L 373.9 183.6 L 378.3 182.9 L 382.7 176.7 L 387.2 189.1 L 391.6 201.8 L 396.1 158.9 L 400.5 170.4 L 404.9 166.9 L 409.4 184.6 L 413.8 164.4 L 418.2 175.7 L 422.7 172.5 L 427.1 189.1 L 431.5 194.8 L 436.0 156.3 L 440.4 177.8 L 444.9 162.1 L 449.3 182.2 L 453.7 150.2 L 458.2 143.5 L 462.6 156.3 L 467.0 25.0 L 471.5 180.3 L 475.9 135.3 L 480.4 124.1 L 484.8 25.0 L 489.2 213.3 L 493.7 161.0 L 498.1 159.5 L 502.5 163.8 L 507.0 180.0 L 511.4 130.6 L 515.8 102.3 L 520.3 117.0 L 524.7 148.4 L 529.2 142.5 L 533.6 142.4 L 538.0 148.8 L 542.5 181.4 L 546.9 184.4 L 551.3 137.7 L 555.8 171.7 L 560.2 169.1 L 564.6 186.8 L 569.1 158.6 L 573.5 161.8 L 578.0 164.1 L 582.4 177.5 L 586.8 180.1 L 591.3 145.9 L 595.7 154.4 L 600.1 174.5 L 604.6 177.3 L 609.0 148.7 L 613.5 165.5 L 617.9 168.3 L 622.3 187.7 L 626.8 159.3 L 631.2 157.9 L 635.6 157.3 L 640.1 175.3 L 644.5 175.2 L 648.9 158.4 L 653.4 163.9 L 657.8 162.8 L 662.3 179.2 L 666.7 144.2 L 671.1 159.0 L 675.6 172.9 L 680.0 178.7 L 680 230 Z" fill="#FF4D8D" fill-opacity="0.10"/>
+  <path d="M 50.0 113.3 L 54.4 140.7 L 58.9 147.8 L 63.3 170.4 L 67.7 149.1 L 72.2 166.0 L 76.6 181.5 L 81.1 210.7 L 85.5 176.9 L 89.9 199.2 L 94.4 184.7 L 98.8 193.7 L 103.2 202.1 L 107.7 167.0 L 112.1 187.0 L 116.5 190.8 L 121.0 194.3 L 125.4 186.6 L 129.9 177.2 L 134.3 176.1 L 138.7 198.8 L 143.2 179.8 L 147.6 197.6 L 152.0 190.6 L 156.5 203.0 L 160.9 203.2 L 165.4 185.6 L 169.8 178.5 L 174.2 179.5 L 178.7 201.6 L 183.1 177.5 L 187.5 189.4 L 192.0 189.4 L 196.4 210.1 L 200.8 204.9 L 205.3 183.5 L 209.7 196.0 L 214.2 203.3 L 218.6 211.3 L 223.0 176.7 L 227.5 169.7 L 231.9 177.3 L 236.3 36.5 L 240.8 176.0 L 245.2 145.2 L 249.6 116.3 L 254.1 24.0 L 258.5 230.0 L 263.0 179.1 L 267.4 172.6 L 271.8 176.2 L 276.3 191.3 L 280.7 133.2 L 285.1 124.5 L 289.6 138.4 L 294.0 164.4 L 298.5 148.0 L 302.9 160.0 L 307.3 174.1 L 311.8 197.9 L 316.2 190.3 L 320.6 172.2 L 325.1 179.4 L 329.5 174.0 L 333.9 218.8 L 338.4 172.5 L 342.8 186.3 L 347.3 192.3 L 351.7 199.4 L 356.1 188.9 L 360.6 175.9 L 365.0 168.5 L 369.4 194.2 L 373.9 183.6 L 378.3 182.9 L 382.7 176.7 L 387.2 189.1 L 391.6 201.8 L 396.1 158.9 L 400.5 170.4 L 404.9 166.9 L 409.4 184.6 L 413.8 164.4 L 418.2 175.7 L 422.7 172.5 L 427.1 189.1 L 431.5 194.8 L 436.0 156.3 L 440.4 177.8 L 444.9 162.1 L 449.3 182.2 L 453.7 150.2 L 458.2 143.5 L 462.6 156.3 L 467.0 25.0 L 471.5 180.3 L 475.9 135.3 L 480.4 124.1 L 484.8 25.0 L 489.2 213.3 L 493.7 161.0 L 498.1 159.5 L 502.5 163.8 L 507.0 180.0 L 511.4 130.6 L 515.8 102.3 L 520.3 117.0 L 524.7 148.4 L 529.2 142.5 L 533.6 142.4 L 538.0 148.8 L 542.5 181.4 L 546.9 184.4 L 551.3 137.7 L 555.8 171.7 L 560.2 169.1 L 564.6 186.8 L 569.1 158.6 L 573.5 161.8 L 578.0 164.1 L 582.4 177.5 L 586.8 180.1 L 591.3 145.9 L 595.7 154.4 L 600.1 174.5 L 604.6 177.3 L 609.0 148.7 L 613.5 165.5 L 617.9 168.3 L 622.3 187.7 L 626.8 159.3 L 631.2 157.9 L 635.6 157.3 L 640.1 175.3 L 644.5 175.2 L 648.9 158.4 L 653.4 163.9 L 657.8 162.8 L 662.3 179.2 L 666.7 144.2 L 671.1 159.0 L 675.6 172.9 L 680.0 178.7" fill="none" stroke="#FF4D8D" stroke-width="2.2" stroke-linejoin="round"/>
+  <text x="50" y="16" font-size="12" fill="#9B94A8" font-family:'Inter','Noto Sans SC',sans-serif>¥603.3万</text>
+  <text x="50" y="248" font-size="12" fill="#9B94A8" font-family:'Inter','Noto Sans SC',sans-serif>¥379.3万</text>
+  <text x="50" y="256" font-size="12" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2010-02</text>
+  <text x="680" y="256" font-size="12" fill="#6B6478" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>2012-10</text>
+</svg>
+    <p class="chart-cap">整体呈明显季节性波动，最近 52 周销售额同比增长 +3.4%。</p>
+  </div>
+  <div class="chart-card">
+    <h4 class="chart-title">🏬 重点门店销售额对比</h4>
+    <svg viewBox="0 0 700 260" class="chart-svg-el" role="img" aria-label="各门店销售额"><line x1="50" y1="220" x2="680" y2="220" stroke="#eee" stroke-width="1"/><rect x="96.7" y="50.0" width="70" height="170.0" rx="6" fill="#4D7CFF"/><text x="131.7" y="42.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>5,317.6万</text><text x="131.7" y="238.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>门店 20</text><text x="131.7" y="254.0" font-size="11" fill="#3DD68C" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>同比 +3.0%</text><rect x="213.3" y="53.6" width="70" height="166.4" rx="6" fill="#7aa0ff"/><text x="248.3" y="45.6" font-size="12" font-weight="700" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>5,203.7万</text><text x="248.3" y="238.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>门店 4</text><text x="248.3" y="254.0" font-size="11" fill="#3DD68C" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>同比 +5.2%</text><rect x="330.0" y="58.3" width="70" height="161.7" rx="6" fill="#4D7CFF"/><text x="365.0" y="50.3" font-size="12" font-weight="700" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>5,059.5万</text><text x="365.0" y="238.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>门店 13</text><text x="365.0" y="254.0" font-size="11" fill="#3DD68C" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>同比 +6.5%</text><rect x="446.7" y="65.1" width="70" height="154.9" rx="6" fill="#7aa0ff"/><text x="481.7" y="57.1" font-size="12" font-weight="700" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>4,846.7万</text><text x="481.7" y="238.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>门店 2</text><text x="481.7" y="254.0" font-size="11" fill="#3DD68C" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>同比 +2.7%</text><rect x="563.3" y="107.9" width="70" height="112.1" rx="6" fill="#4D7CFF"/><text x="598.3" y="99.9" font-size="12" font-weight="700" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>3,506.1万</text><text x="598.3" y="238.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>门店 10</text><text x="598.3" y="254.0" font-size="11" fill="#3DD68C" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>同比 +-1.6%</text></svg>
+    <p class="chart-cap">5 家重点门店，门店 20 与 4 贡献最高，均实现同比正增长。</p>
+  </div>
+  <div class="chart-card">
+    <h4 class="chart-title">📊 部门销售贡献 Top 10</h4>
+    <svg viewBox="0 0 700 380" class="chart-svg-el" role="img" aria-label="部门销售贡献"><text x="110" y="39.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 92</text><rect x="120" y="24.0" width="450.0" height="20" rx="5" fill="#FF4D8D" fill-opacity="0.85"/><text x="578.0" y="39.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>3,924.3万 · 16.4%</text><text x="110" y="69.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 95</text><rect x="120" y="54.0" width="396.4" height="20" rx="5" fill="#FF4D8D" fill-opacity="0.85"/><text x="524.4" y="69.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>3,457.0万 · 14.4%</text><text x="110" y="99.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 72</text><rect x="120" y="84.0" width="294.0" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="422.0" y="99.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2,564.3万 · 10.7%</text><text x="110" y="129.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 38</text><rect x="120" y="114.0" width="273.2" height="20" rx="5" fill="#FF4D8D" fill-opacity="0.85"/><text x="401.2" y="129.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2,382.3万 · 10.0%</text><text x="110" y="159.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 90</text><rect x="120" y="144.0" width="259.5" height="20" rx="5" fill="#FF4D8D" fill-opacity="0.85"/><text x="387.5" y="159.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2,263.4万 · 9.5%</text><text x="110" y="189.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 2</text><rect x="120" y="174.0" width="256.6" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="384.6" y="189.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2,238.1万 · 9.4%</text><text x="110" y="219.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 40</text><rect x="120" y="204.0" width="256.0" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="384.0" y="219.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>2,232.1万 · 9.3%</text><text x="110" y="249.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 8</text><rect x="120" y="234.0" width="194.3" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="322.3" y="249.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>1,694.0万 · 7.1%</text><text x="110" y="279.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 91</text><rect x="120" y="264.0" width="193.5" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="321.5" y="279.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>1,687.9万 · 7.1%</text><text x="110" y="309.0" font-size="12" font-weight="700" fill="#2A2438" text-anchor="end" font-family:'Inter','Noto Sans SC',sans-serif>部门 94</text><rect x="120" y="294.0" width="170.9" height="20" rx="5" fill="#4D7CFF" fill-opacity="0.85"/><text x="298.9" y="309.0" font-size="11" fill="#6B6478" font-family:'Inter','Noto Sans SC',sans-serif>1,490.2万 · 6.2%</text></svg>
+    <p class="chart-cap">部门 92 / 95 为核心部门，贡献度领先；粉色为核心部门、蓝色为其他。</p>
+  </div>
+  <div class="chart-card">
+    <h4 class="chart-title">🎯 未来 4 周需求情景</h4>
+    <svg viewBox="0 0 700 260" class="chart-svg-el" role="img" aria-label="未来4周需求情景"><line x1="50" y1="220" x2="680" y2="220" stroke="#eee" stroke-width="1"/><rect x="140.0" y="78.6" width="90" height="141.4" rx="6" fill="#4D7CFF"/><text x="185.0" y="70.6" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>0.17亿</text><text x="185.0" y="240.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>保守情景</text><rect x="320.0" y="64.3" width="90" height="155.7" rx="6" fill="#FFD93D"/><text x="365.0" y="56.3" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>0.18亿</text><text x="365.0" y="240.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>基准情景</text><rect x="500.0" y="50.0" width="90" height="170.0" rx="6" fill="#3DD68C"/><text x="545.0" y="42.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>0.20亿</text><text x="545.0" y="240.0" font-size="13" font-weight="800" fill="#2A2438" text-anchor="middle" font-family:'Inter','Noto Sans SC',sans-serif>乐观情景</text></svg>
+    <p class="chart-cap">保守 / 基准 / 乐观三档需求测算，用于目标备货覆盖额（Coverage）决策。</p>
+  </div>
+</div>
+
+                <div class="detail-block">
+                    <h3 class="detail-h3">方法闭环</h3>
+                    <ul class="detail-list">
+                        <li><strong>数据质量：</strong>主键 / 缺失 / 负销售额核查，覆盖 45 门店、81 部门，形成可追溯记录。</li>
+                        <li><strong>滚动审核：</strong>验证期选方法、测试期独立检验，避免事后拟合。</li>
+                        <li><strong>三类预测对比：</strong>去年同期 / 近期四周平均 / 双指数平滑，逐单元择优。</li>
+                        <li><strong>三种需求情景：</strong>保守 / 基准 / 乐观，结合覆盖期与服务水平假设测算目标备货覆盖额。</li>
+                    </ul>
+                </div>
+
+                <div class="detail-note">
+                    <strong>数据边界说明：</strong>公开数据为周度销售额，不含现有库存与在途订单，故只测算需求侧目标覆盖额；门店与部门作为经营单元，用于练习绩效管理与预测审核方法。
+                </div>
+
+                <p class="detail-output">📎 输出：5 页月度经营复盘与行动建议，配套经营分析看板（Excel）。</p>
+            </div>
+
+            <!-- 库存分析与补货 -->
+            <div class="project-detail" id="detail-inventory" hidden>
+                <div class="detail-head detail-inventory">
+                    <div class="detail-icon">📦</div>
+                    <div>
+                        <h2 class="detail-title">Olist 库存分析与智能补货决策系统</h2>
+                        <p class="detail-tagline">Python + 交互式 Dashboard · 约 10 万笔真实电商订单</p>
+                    </div>
+                </div>
+                <p class="detail-overview">基于 Olist 约 10 万笔真实匿名化电商订单，连接订单、商品、卖家和履约时间数据，搭建从需求分析、ABC/XYZ 分类到 SKU 补货建议的完整决策闭环，回答「今天补什么、补多少、为什么」。</p>
+
+                <div class="detail-metrics">
+                    <div class="d-metric"><span class="d-value">+5.89<span class="d-unit">pp</span></span><span class="d-label">Fill Rate 提升</span></div>
+                    <div class="d-metric"><span class="d-value">-36.2%</span><span class="d-label">缺货率下降</span></div>
+                    <div class="d-metric"><span class="d-value">-20.9%</span><span class="d-label">综合成本下降</span></div>
+                    <div class="d-metric"><span class="d-value">+12.5%</span><span class="d-label">平均库存缓冲</span></div>
+                    <div class="d-metric"><span class="d-value">300</span><span class="d-label">SKU · 152卖家 · 40品类</span></div>
+                    <div class="d-metric"><span class="d-value">180天</span><span class="d-label">真实需求回测</span></div>
+                </div>
+
+                <div class="detail-block">
+                    <h3 class="detail-h3">方法闭环</h3>
+                    <ul class="detail-list">
+                        <li><strong>需求：</strong>最后 8 周留出验证，逐 SKU 比较季节朴素 / 移动平均 / 动量融合 / Croston 间歇需求，以 WAPE 评估 28 天需求。</li>
+                        <li><strong>供应：</strong>以订单批准到卖家交运的真实时长作为提前期代理，计算安全库存、ROP、Order-up-to。</li>
+                        <li><strong>分类与行动：</strong>ABC/XYZ 组合，输出 P0–P4 补货行动清单。</li>
+                        <li><strong>交互看板：</strong>五页 Dashboard，支持 SKU 搜索、品类 / 优先级筛选、清单导出与情景模拟。</li>
+                    </ul>
+                </div>
+
+                <div class="detail-note">
+                    <strong>数据边界说明：</strong>履约提前期为公开数据中最接近供应响应速度的代理变量（落地应替换为 PO 到收货的采购提前期）；单位成本按售价 65% 建模，结果仅用于策略相对比较，不代表 Olist 实际利润。
+                </div>
+
+                <p class="detail-output">📎 下方为项目真实交互看板，可搜索 SKU、筛选优先级并模拟情景：</p>
+                <div class="detail-iframe-wrap">
+                    <iframe id="inventoryFrame" class="detail-iframe" title="Olist 库存补货决策看板" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
